@@ -1,0 +1,20 @@
+{
+	"homepage": "https://minecraft.curseforge.com/projects/armor-stand-configurator/files",
+	"promos": {
+		"1.11.2-latest": "1.0",
+		"1.11.2-recommended": "1.0",
+		"1.11-latest": "1.0",
+		"1.11-recommended": "1.0",
+		"1.10.2-latest": "1.0",
+		"1.10.2-recommended": "1.0"
+	},
+	"1.11.2": {
+		"1.0": "Initial release"
+	},
+	"1.11": {
+		"1.0": "Initial release"
+	},
+	"1.10.2": {
+		"1.0": "Initial release"
+	}	
+}

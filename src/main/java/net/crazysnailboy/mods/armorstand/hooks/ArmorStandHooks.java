@@ -28,7 +28,7 @@ public class ArmorStandHooks
 		}
 		else if (!armorstand.world.isRemote && !player.isSpectator())
 		{
-			boolean playerHasStack = (stack != null);
+			boolean playerHasStack = (!stack.isEmpty());
 			if (playerHasStack)
 			{
 				return giveItemToArmorStand(armorstand, player, stack);
@@ -51,7 +51,7 @@ public class ArmorStandHooks
 		{
 			if (giveSlot == null) continue;
 
-			boolean entityHasStack = armorstand.getItemStackFromSlot(giveSlot) != null;
+			boolean entityHasStack = (!armorstand.getItemStackFromSlot(giveSlot).isEmpty());
 			if (!entityHasStack && !isDisabled(armorstand, giveSlot))
 			{
 				if (giveSlot.getSlotType() == Type.HAND && !armorstand.getShowArms()) return EnumActionResult.FAIL;
@@ -71,13 +71,13 @@ public class ArmorStandHooks
 		{
 			if (takeSlot == null) continue;
 
-			boolean entityHasStack = armorstand.getItemStackFromSlot(takeSlot) != null;
+			boolean entityHasStack = (!armorstand.getItemStackFromSlot(takeSlot).isEmpty());
 			if (entityHasStack && !isDisabled(armorstand, takeSlot))
 			{
 				ItemStack takeStack = armorstand.getItemStackFromSlot(takeSlot).copy();
 				if (player.inventory.addItemStackToInventory(takeStack))
 				{
-					armorstand.setItemStackToSlot(takeSlot, null);
+					armorstand.setItemStackToSlot(takeSlot, ItemStack.EMPTY);
 				}
 				else
 				{
@@ -114,19 +114,19 @@ public class ArmorStandHooks
 		boolean isSmall = armorstand.isSmall();
 		double d4 = isSmall ? vec.yCoord * 2.0D : vec.yCoord;
 
-		if (d4 >= 0.1D && d4 < 0.1D + (isSmall ? 0.8D : 0.45D) && armorstand.getItemStackFromSlot(EntityEquipmentSlot.FEET) != null)
+		if (d4 >= 0.1D && d4 < 0.1D + (isSmall ? 0.8D : 0.45D) && (!armorstand.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty()))
 		{
 			slot = EntityEquipmentSlot.FEET;
 		}
-		else if (d4 >= 0.9D + (isSmall ? 0.3D : 0.0D) && d4 < 0.9D + (isSmall ? 1.0D : 0.7D) && armorstand.getItemStackFromSlot(EntityEquipmentSlot.CHEST) != null)
+		else if (d4 >= 0.9D + (isSmall ? 0.3D : 0.0D) && d4 < 0.9D + (isSmall ? 1.0D : 0.7D) && (!armorstand.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()))
 		{
 			slot = EntityEquipmentSlot.CHEST;
 		}
-		else if (d4 >= 0.4D && d4 < 0.4D + (isSmall ? 1.0D : 0.8D) && armorstand.getItemStackFromSlot(EntityEquipmentSlot.LEGS) != null)
+		else if (d4 >= 0.4D && d4 < 0.4D + (isSmall ? 1.0D : 0.8D) && (!armorstand.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()))
 		{
 			slot = EntityEquipmentSlot.LEGS;
 		}
-		else if (d4 >= 1.6D && armorstand.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
+		else if (d4 >= 1.6D && (!armorstand.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()))
 		{
 			slot = EntityEquipmentSlot.HEAD;
 		}

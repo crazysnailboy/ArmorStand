@@ -79,7 +79,7 @@ public class GuiArmorStand extends GuiScreen
 		}
 
 		// rotation textbox
-		this.rotationTextField = new GuiNumberField(4, this.fontRendererObj, 1 + offsetX, 1 + offsetY + (4 * 22), 38, 17, String.valueOf((int)this.armorStandData.rotation));
+		this.rotationTextField = new GuiNumberField(4, this.fontRenderer, 1 + offsetX, 1 + offsetY + (4 * 22), 38, 17, String.valueOf((int)this.armorStandData.rotation));
 
 		// copy & paste buttons
 		this.copyButton = this.addButton(new GuiButton(96, 20, (offsetY + (5 * 22)), 64, 20, I18n.format(String.format("%s.gui.label.copy", ArmorStand.MODID))));
@@ -97,7 +97,7 @@ public class GuiArmorStand extends GuiScreen
 			int height = 17;
 			String value = String.valueOf((int)this.armorStandData.pose[i]);
 
-			this.poseTextFields[i] = new GuiNumberField(id, this.fontRendererObj, x, y, width, height, value);
+			this.poseTextFields[i] = new GuiNumberField(id, this.fontRenderer, x, y, width, height, value);
 			this.poseTextFields[i].setMaxStringLength(3);
 		}
 
@@ -113,7 +113,7 @@ public class GuiArmorStand extends GuiScreen
 		this.drawDefaultBackground();
 
 		// gui title
-		this.drawCenteredString(this.fontRendererObj, I18n.format(String.format("%s.gui.title", ArmorStand.MODID)), this.width / 2, 20, 0xFFFFFF);
+		this.drawCenteredString(this.fontRenderer, I18n.format(String.format("%s.gui.title", ArmorStand.MODID)), this.width / 2, 20, 0xFFFFFF);
 
 		// textboxes
 		rotationTextField.drawTextBox();
@@ -126,22 +126,22 @@ public class GuiArmorStand extends GuiScreen
 		for ( int i = 0 ; i < buttonLabels.length ; i++ )
 		{
 			int x = offsetX;
-			int y = offsetY + (i * 22) + (10 - (this.fontRendererObj.FONT_HEIGHT / 2));
-			this.drawString(this.fontRendererObj, buttonLabels[i], x, y, 0xA0A0A0);
+			int y = offsetY + (i * 22) + (10 - (this.fontRenderer.FONT_HEIGHT / 2));
+			this.drawString(this.fontRenderer, buttonLabels[i], x, y, 0xA0A0A0);
 		}
 
 		// right column labels
 		offsetX = this.width - 20 - 100;
 		// x, y, z
-		this.drawString(this.fontRendererObj, "X", offsetX + (0 * 35), 37, 0xA0A0A0);
-		this.drawString(this.fontRendererObj, "Y", offsetX + (1 * 35), 37, 0xA0A0A0);
-		this.drawString(this.fontRendererObj, "Z", offsetX + (2 * 35), 37, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "X", offsetX + (0 * 35), 37, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "Y", offsetX + (1 * 35), 37, 0xA0A0A0);
+		this.drawString(this.fontRenderer, "Z", offsetX + (2 * 35), 37, 0xA0A0A0);
 		// pose textboxes
 		for ( int i = 0 ; i < sliderLabels.length ; i++ )
 		{
-			int x = offsetX - this.fontRendererObj.getStringWidth(sliderLabels[i]) - 10;
-			int y = offsetY + (i * 22) + (10 - (this.fontRendererObj.FONT_HEIGHT / 2));
-			this.drawString(this.fontRendererObj, sliderLabels[i], x, y, 0xA0A0A0);
+			int x = offsetX - this.fontRenderer.getStringWidth(sliderLabels[i]) - 10;
+			int y = offsetY + (i * 22) + (10 - (this.fontRenderer.FONT_HEIGHT / 2));
+			this.drawString(this.fontRenderer, sliderLabels[i], x, y, 0xA0A0A0);
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);

@@ -49,7 +49,7 @@ public class ArmorStandSyncMessage implements IMessage
 		@Override
 		public IMessage onMessage(final ArmorStandSyncMessage message, final MessageContext ctx)
 		{
-			final World world = ctx.getServerHandler().playerEntity.world;
+			final World world = ctx.getServerHandler().player.world;
 
 			IThreadListener threadListener = (WorldServer)world;
 			threadListener.addScheduledTask(new Runnable()

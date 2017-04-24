@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = ArmorStand.MODID, name = ArmorStand.NAME, version = ArmorStand.VERSION, acceptedMinecraftVersions = "[1.10.2]", guiFactory = ArmorStand.GUIFACTORY, updateJSON = ArmorStand.UPDATEJSON)
+@Mod(modid = ArmorStand.MODID, name = ArmorStand.NAME, version = ArmorStand.VERSION, acceptedMinecraftVersions = "[1.11,1.11.2]", guiFactory = ArmorStand.GUIFACTORY, updateJSON = ArmorStand.UPDATEJSON)
 public class ArmorStand
 {
 	public static final String MODID = "csb_armorstand";
