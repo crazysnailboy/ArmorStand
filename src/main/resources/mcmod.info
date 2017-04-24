@@ -1,0 +1,14 @@
+[{
+	"modid": "csb_armorstand",
+	"name": "Armor Stand Configurator",
+	"description": "A GUI to allow configuration of Armor Stand properties",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "https://minecraft.curseforge.com/projects/armor-stand-configurator",
+	"updateUrl": "",
+	"authorList": ["crazysnailboy"],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+}]

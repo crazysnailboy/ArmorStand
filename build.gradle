@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+//Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
+
+
+version = "1.0"
+group = "net.crazysnailboy.mods.armorstand"
+archivesBaseName = "ArmorStandGUI-1.10"
+
+sourceCompatibility = targetCompatibility = "1.6"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+
+minecraft {
+    version = "1.10.2-12.18.3.2185"
+    runDir = "run"
+    mappings = "stable_29"
+    makeObfSourceJar = false
+    
+    replace "\${version}", project.version
+    replaceIn "ArmorStand.java"
+}
+
+dependencies {
+}
+
+processResources {
+
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+    
+}
