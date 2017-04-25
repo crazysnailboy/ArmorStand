@@ -10,6 +10,7 @@ public class ArmorStandData
 
 	public boolean invisible = false;
 	public boolean noBasePlate = false;
+	public boolean noGravity = false;
 	public boolean showArms = false;
 	public boolean small = false;
 
@@ -24,8 +25,9 @@ public class ArmorStandData
 		{
 			case 0: return invisible;
 			case 1: return noBasePlate;
-			case 2: return showArms;
-			case 3: return small;
+			case 2: return noGravity;
+			case 3: return showArms;
+			case 4: return small;
 		}
 		return false;
 	}
@@ -35,6 +37,7 @@ public class ArmorStandData
 	{
 		this.invisible = compound.getBoolean("Invisible");
 		this.noBasePlate = compound.getBoolean("NoBasePlate");
+		this.noGravity = compound.getBoolean("NoGravity");
 		this.showArms = compound.getBoolean("ShowArms");
 		this.small = compound.getBoolean("Small");
 
@@ -70,6 +73,7 @@ public class ArmorStandData
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setBoolean("Invisible", this.invisible);
 		compound.setBoolean("NoBasePlate", this.noBasePlate);
+		compound.setBoolean("NoGravity", this.noGravity);
 		compound.setBoolean("ShowArms", this.showArms);
 		compound.setBoolean("Small", this.small);
 

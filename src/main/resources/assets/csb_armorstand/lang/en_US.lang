@@ -4,6 +4,7 @@ csb_armorstand.gui.title=Armor Stand
 
 csb_armorstand.gui.label.invisible=Invisible
 csb_armorstand.gui.label.no_base_plate=No Base Plate
+csb_armorstand.gui.label.no_gravity=No Gravity
 csb_armorstand.gui.label.show_arms=Show Arms
 csb_armorstand.gui.label.small=Small
 csb_armorstand.gui.label.rotation=Rotation
