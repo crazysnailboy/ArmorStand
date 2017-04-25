@@ -26,7 +26,7 @@ public class GuiArmorStand extends GuiScreen
 	private final EntityArmorStand entityArmorStand;
 	private final ArmorStandData armorStandData;
 
-	private final String[] buttonLabels = new String[] { "invisible", "no_base_plate", "show_arms", "small", "rotation" };
+	private final String[] buttonLabels = new String[] { "invisible", "no_base_plate", "no_gravity", "show_arms", "small", "rotation" };
 	private final String[] sliderLabels = new String[] { "head", "body", "left_leg", "right_leg", "left_arm", "right_arm" };
 
 
@@ -79,12 +79,7 @@ public class GuiArmorStand extends GuiScreen
 		}
 
 		// rotation textbox
-		this.rotationTextField = new GuiNumberField(4, this.fontRenderer, 1 + offsetX, 1 + offsetY + (4 * 22), 38, 17, String.valueOf((int)this.armorStandData.rotation));
-
-		// copy & paste buttons
-		this.copyButton = this.addButton(new GuiButton(96, 20, (offsetY + (5 * 22)), 64, 20, I18n.format(String.format("%s.gui.label.copy", ArmorStand.MODID))));
-		this.pasteButton = this.addButton(new GuiButton(97, 88, (offsetY + (5 * 22)), 64, 20, I18n.format(String.format("%s.gui.label.paste", ArmorStand.MODID))));
-
+		this.rotationTextField = new GuiNumberField(4, this.fontRenderer, 1 + offsetX, 1 + offsetY + (this.toggleButtons.length * 22), 38, 17, String.valueOf((int)this.armorStandData.rotation));
 
 		// pose textboxes
 		offsetX = this.width - 20 - 100;
@@ -101,9 +96,17 @@ public class GuiArmorStand extends GuiScreen
 			this.poseTextFields[i].setMaxStringLength(3);
 		}
 
+		offsetY = this.height / 4 + 120 + 12;
+
+		// copy & paste buttons
+		offsetX = 20;
+		this.copyButton = this.addButton(new GuiButton(96, offsetX, offsetY, 64, 20, I18n.format(String.format("%s.gui.label.copy", ArmorStand.MODID))));
+		this.pasteButton = this.addButton(new GuiButton(97, offsetX + 66, offsetY, 64, 20, I18n.format(String.format("%s.gui.label.paste", ArmorStand.MODID))));
+
 		// done & cancel buttons
-		this.doneButton = this.addButton(new GuiButton(98, this.width / 2 - 4 - 150, this.height / 4 + 120 + 12, 150, 20, I18n.format("gui.done", new Object[0])));
-		this.cancelButton = this.addButton(new GuiButton(99, this.width / 2 + 4, this.height / 4 + 120 + 12, 150, 20, I18n.format("gui.cancel", new Object[0])));
+		offsetX = this.width - 20;
+		this.doneButton = this.addButton(new GuiButton(98, offsetX - ((2 * 96) + 2), offsetY, 96, 20, I18n.format("gui.done")));
+		this.cancelButton = this.addButton(new GuiButton(99, offsetX - 96, offsetY, 96, 20, I18n.format("gui.cancel")));
 	}
 
 
@@ -260,8 +263,9 @@ public class GuiArmorStand extends GuiScreen
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setBoolean("Invisible", this.toggleButtons[0].getValue());
 		compound.setBoolean("NoBasePlate", this.toggleButtons[1].getValue());
-		compound.setBoolean("ShowArms", this.toggleButtons[2].getValue());
-		compound.setBoolean("Small", this.toggleButtons[3].getValue());
+		compound.setBoolean("NoGravity", this.toggleButtons[2].getValue());
+		compound.setBoolean("ShowArms", this.toggleButtons[3].getValue());
+		compound.setBoolean("Small", this.toggleButtons[4].getValue());
 
 		NBTTagList rotationTag = new NBTTagList();
 		rotationTag.appendTag(new NBTTagFloat(Float.valueOf( this.rotationTextField.getText() )));
