@@ -31,7 +31,7 @@ public class GuiArmorStand extends GuiScreen
 
 
 	private GuiTextField rotationTextField;
-	private GuiToggleButton[] toggleButtons = new GuiToggleButton[4];
+	private GuiToggleButton[] toggleButtons = new GuiToggleButton[5];
 	private GuiTextField[] poseTextFields = new GuiTextField[18];
 
 	private GuiButton copyButton;
