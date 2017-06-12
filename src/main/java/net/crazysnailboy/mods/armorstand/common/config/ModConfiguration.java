@@ -8,13 +8,15 @@ import net.crazysnailboy.mods.armorstand.client.config.ModGuiConfigEntries;
 import net.crazysnailboy.mods.armorstand.common.network.ConfigSyncMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class ModConfiguration
@@ -25,18 +27,12 @@ public class ModConfiguration
 	public static boolean overrideEntityInteract = true;
 
 
-	public static void preInit()
+	public static void initializeConfiguration()
 	{
 		File configFile = new File(Loader.instance().getConfigDir(), ArmorStand.MODID + ".cfg");
 		config = new Configuration(configFile);
 		config.load();
 		syncFromFile();
-		MinecraftForge.EVENT_BUS.register(new ConfigEventHandler());
-	}
-
-	public static void clientPreInit()
-	{
-		MinecraftForge.EVENT_BUS.register(new ClientConfigEventHandler());
 	}
 
 
@@ -56,12 +52,6 @@ public class ModConfiguration
 		syncConfig(false, true);
 	}
 
-	public static void syncFromFields()
-	{
-		syncConfig(false, false);
-	}
-
-
 
 	private static void syncConfig(boolean loadConfigFromFile, boolean readFieldsFromConfig)
 	{
@@ -71,11 +61,11 @@ public class ModConfiguration
 			config.load();
 		}
 
-		Property propEnableConfigGUI = config.get(Configuration.CATEGORY_GENERAL, "enableConfigGui", enableConfigGui, "");
+		Property propEnableConfigGUI = config.get(Configuration.CATEGORY_GENERAL, "enableConfigGui", true, "");
 		propEnableConfigGUI.setLanguageKey(String.format("%s.config.enableConfigGui", ArmorStand.MODID));
 		propEnableConfigGUI.setRequiresMcRestart(false);
 
-		Property propEnableDeathDrops = config.get(Configuration.CATEGORY_GENERAL, "overrideEntityInteract", overrideEntityInteract, "");
+		Property propEnableDeathDrops = config.get(Configuration.CATEGORY_GENERAL, "overrideEntityInteract", true, "");
 		propEnableDeathDrops.setLanguageKey(String.format("%s.config.overrideEntityInteract", ArmorStand.MODID));
 		propEnableDeathDrops.setRequiresMcRestart(false);
 
@@ -111,26 +101,24 @@ public class ModConfiguration
 	}
 
 
-
-
+	@EventBusSubscriber
 	public static class ConfigEventHandler
 	{
+
 		@SubscribeEvent
-		public void onPlayerLoggedIn(PlayerLoggedInEvent event)
+		public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 		{
 			if (!event.player.world.isRemote)
 			{
 				ArmorStand.INSTANCE.getNetwork().sendTo(new ConfigSyncMessage(), (EntityPlayerMP)event.player);
 			}
 		}
-	}
 
-	public static class ClientConfigEventHandler
-	{
+		@SideOnly(Side.CLIENT)
 		@SubscribeEvent
-		public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 		{
-			if (ArmorStand.MODID.equals(event.getModID()))
+			if (event.getModID().equals(ArmorStand.MODID))
 			{
 				if (!event.isWorldRunning() || Minecraft.getMinecraft().isSingleplayer())
 				{

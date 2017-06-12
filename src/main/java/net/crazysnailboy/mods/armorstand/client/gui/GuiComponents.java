@@ -23,9 +23,9 @@ public class GuiComponents
 		}
 
 		@Override
-		public void drawButton(Minecraft mc, int mouseX, int mouseY)
+		public void func_191745_a(Minecraft mc, int mouseX, int mouseY, float p_191745_4_) // public void drawButton(Minecraft mc, int mouseX, int mouseY)
 		{
-			super.drawButton(mc, mouseX, mouseY);
+			super.func_191745_a(mc, mouseX, mouseY, p_191745_4_);
 		}
 
 		public void buttonPressed()

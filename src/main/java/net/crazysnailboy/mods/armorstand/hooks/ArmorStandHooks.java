@@ -112,7 +112,7 @@ public class ArmorStandHooks
 		double d2 = 0.4D;
 		double d3 = 1.6D;
 		boolean isSmall = armorstand.isSmall();
-		double d4 = isSmall ? vec.yCoord * 2.0D : vec.yCoord;
+		double d4 = isSmall ? vec.y * 2.0D : vec.y;
 
 		if (d4 >= 0.1D && d4 < 0.1D + (isSmall ? 0.8D : 0.45D) && (!armorstand.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty()))
 		{

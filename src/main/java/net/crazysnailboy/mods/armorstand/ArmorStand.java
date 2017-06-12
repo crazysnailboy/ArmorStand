@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = ArmorStand.MODID, name = ArmorStand.NAME, version = ArmorStand.VERSION, acceptedMinecraftVersions = "[1.11,1.11.2]", guiFactory = ArmorStand.GUIFACTORY, updateJSON = ArmorStand.UPDATEJSON)
+@Mod(modid = ArmorStand.MODID, name = ArmorStand.NAME, version = ArmorStand.VERSION, acceptedMinecraftVersions = "[1.12]", guiFactory = ArmorStand.GUIFACTORY, updateJSON = ArmorStand.UPDATEJSON)
 public class ArmorStand
 {
 	public static final String MODID = "csb_armorstand";
@@ -50,8 +50,7 @@ public class ArmorStand
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		// initialize the configuration
-		ModConfiguration.preInit();
-		if (event.getSide() == Side.CLIENT) ModConfiguration.clientPreInit();
+		ModConfiguration.initializeConfiguration();
 
 		// register the network messages
 		NETWORK.registerMessage(ArmorStandSyncMessage.MessageHandler.class, ArmorStandSyncMessage.class, 0, Side.SERVER);
