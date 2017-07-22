@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
+
 public class ArmorStandData
 {
 
@@ -21,13 +22,18 @@ public class ArmorStandData
 
 	public boolean getBooleanValue(int index)
 	{
-		switch(index)
+		switch (index)
 		{
-		case 0: return invisible;
-		case 1: return noBasePlate;
-		case 2: return noGravity;
-		case 3: return showArms;
-		case 4: return small;
+			case 0:
+				return this.invisible;
+			case 1:
+				return this.noBasePlate;
+			case 2:
+				return this.noGravity;
+			case 3:
+				return this.showArms;
+			case 4:
+				return this.small;
 		}
 		return false;
 	}
@@ -50,13 +56,13 @@ public class ArmorStandData
 			NBTTagCompound poseTag = (NBTTagCompound)compound.getTag("Pose");
 
 			String[] keys = new String[] { "Head", "Body", "LeftLeg", "RightLeg", "LeftArm", "RightArm" };
-			for ( int i = 0 ; i < keys.length ; i++ )
+			for (int i = 0; i < keys.length; i++)
 			{
 				String key = keys[i];
 				if (poseTag.hasKey(key))
 				{
 					NBTTagList tagList = poseTag.getTagList(key, NBT.TAG_FLOAT);
-					for ( int j = 0 ; j <= 2 ; j++ )
+					for (int j = 0; j <= 2; j++)
 					{
 						int k = (i * 3) + j;
 						this.pose[k] = tagList.getFloatAt(j);

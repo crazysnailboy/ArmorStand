@@ -1,11 +1,11 @@
 package net.crazysnailboy.mods.armorstand.client.gui;
 
-import org.apache.commons.lang3.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 
 @SideOnly(Side.CLIENT)
 public class GuiComponents
@@ -51,32 +51,64 @@ public class GuiComponents
 	public static class GuiNumberField extends net.minecraft.client.gui.GuiTextField
 	{
 
-		public GuiNumberField(int componentId, FontRenderer fontRendererObj, int x, int y, int width, int height, String defaultValue)
+		public GuiNumberField(int componentId, FontRenderer fontRenderer, int x, int y, int width, int height, String defaultValue)
 		{
-			super(componentId, fontRendererObj, x, y, width, height);
+			super(componentId, fontRenderer, x, y, width, height);
 			this.setText(defaultValue);
 		}
 
 		@Override
 		public void writeText(String textToWrite)
 		{
-			if (StringUtils.isNumeric(textToWrite)) super.writeText(textToWrite);
+			if (this.isNumeric(textToWrite)) super.writeText(textToWrite);
 		}
 
 		@Override
 		public String getText()
 		{
-			return (StringUtils.isNumeric(super.getText()) ? super.getText() : "0");
+			return (this.isNumeric(super.getText()) ? super.getText() : "0");
+		}
+
+		public float getFloat()
+		{
+			try
+			{
+				return Float.valueOf(super.getText());
+			}
+			catch (NumberFormatException ex)
+			{
+				return 0.0F;
+			}
 		}
 
 		@Override
-		public void setFocused(boolean isFocusedIn)
+		public void setFocused(boolean isFocused)
 		{
-			super.setFocused(isFocusedIn);
-			if (!isFocusedIn)
+			super.setFocused(isFocused);
+			if (!isFocused)
 			{
 				this.setSelectionPos(this.getText().length());
 				this.setCursorPositionEnd();
+			}
+		}
+
+		private boolean isNumeric(String value)
+		{
+			if (value.equals("-"))
+			{
+				return true;
+			}
+			else
+			{
+				try
+				{
+					Integer.parseInt(value);
+					return true;
+				}
+				catch (NumberFormatException ex)
+				{
+					return false;
+				}
 			}
 		}
 

@@ -1,4 +1,4 @@
-package net.crazysnailboy.mods.armorstand.common.network;
+package net.crazysnailboy.mods.armorstand.common.network.message;
 
 import io.netty.buffer.ByteBuf;
 import net.crazysnailboy.mods.armorstand.ArmorStand;
@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+
 
 public class ConfigSyncMessage implements IMessage
 {
@@ -26,15 +27,15 @@ public class ConfigSyncMessage implements IMessage
 	@Override
 	public void fromBytes(ByteBuf buf)
 	{
-		enableConfigGui = (ByteBufUtils.readVarShort(buf) == 1);
-		overrideEntityInteract = (ByteBufUtils.readVarShort(buf) == 1);
+		this.enableConfigGui = (ByteBufUtils.readVarShort(buf) == 1);
+		this.overrideEntityInteract = (ByteBufUtils.readVarShort(buf) == 1);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf)
 	{
-		ByteBufUtils.writeVarShort(buf, (enableConfigGui ? 1 : 0));
-		ByteBufUtils.writeVarShort(buf, (overrideEntityInteract ? 1 : 0));
+		ByteBufUtils.writeVarShort(buf, (this.enableConfigGui ? 1 : 0));
+		ByteBufUtils.writeVarShort(buf, (this.overrideEntityInteract ? 1 : 0));
 	}
 
 
@@ -49,7 +50,7 @@ public class ConfigSyncMessage implements IMessage
 				else if (ctx.side == Side.CLIENT) return Minecraft.getMinecraft();
 				else return null;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				ArmorStand.LOGGER.catching(ex);
 				return null;
@@ -59,9 +60,10 @@ public class ConfigSyncMessage implements IMessage
 		@Override
 		public IMessage onMessage(final ConfigSyncMessage message, MessageContext ctx)
 		{
-			IThreadListener threadListener = getThreadListener(ctx);
+			IThreadListener threadListener = this.getThreadListener(ctx);
 			threadListener.addScheduledTask(new Runnable()
 			{
+
 				@Override
 				public void run()
 				{
