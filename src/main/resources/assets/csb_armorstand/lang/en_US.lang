@@ -22,6 +22,10 @@ csb_armorstand.gui.label.paste=Paste
 
 csb_armorstand.config.enableConfigGui=Enable GUI
 csb_armorstand.config.enableConfigGui.tooltip=Show the Armor Stand configuration GUI on shift right click
-
 csb_armorstand.config.overrideEntityInteract=Process Interactions
 csb_armorstand.config.overrideEntityInteract.tooltip=Use custom logic when right-clicking an Armor Stand
+csb_armorstand.config.enableNameTags=Enable Name Tags
+csb_armorstand.config.enableNameTags.tooltip=Allow Armor Stands to be renamed with Name Tags
+
+csb_armorstand.key.openArmorStandGui=Open GUI
+csb_armorstand.key.categories.general=Armor Stand Configurator

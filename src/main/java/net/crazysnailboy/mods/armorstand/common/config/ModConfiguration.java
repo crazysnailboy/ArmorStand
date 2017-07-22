@@ -5,38 +5,45 @@ import java.util.ArrayList;
 import java.util.List;
 import net.crazysnailboy.mods.armorstand.ArmorStand;
 import net.crazysnailboy.mods.armorstand.client.config.ModGuiConfigEntries;
-import net.crazysnailboy.mods.armorstand.common.network.ConfigSyncMessage;
+import net.crazysnailboy.mods.armorstand.common.network.message.ConfigSyncMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class ModConfiguration
 {
+
+	private static class DefaultValues
+	{
+
+		private static final boolean enableConfigGui = true;
+		private static final boolean overrideEntityInteract = true;
+		private static final boolean enableNameTags = true;
+	}
+
+
 	private static Configuration config = null;
 
-	public static boolean enableConfigGui = true;
-	public static boolean overrideEntityInteract = true;
+	public static boolean enableConfigGui = DefaultValues.enableConfigGui;
+	public static boolean overrideEntityInteract = DefaultValues.overrideEntityInteract;
+	public static boolean enableNameTags = DefaultValues.enableNameTags;
 
 
-	public static void preInit()
+	public static void initializeConfig()
 	{
 		File configFile = new File(Loader.instance().getConfigDir(), ArmorStand.MODID + ".cfg");
 		config = new Configuration(configFile);
 		config.load();
 		syncFromFile();
-		MinecraftForge.EVENT_BUS.register(new ConfigEventHandler());
-	}
-
-	public static void clientPreInit()
-	{
-		MinecraftForge.EVENT_BUS.register(new ClientConfigEventHandler());
 	}
 
 
@@ -56,27 +63,23 @@ public class ModConfiguration
 		syncConfig(false, true);
 	}
 
-	public static void syncFromFields()
-	{
-		syncConfig(false, false);
-	}
-
-
 
 	private static void syncConfig(boolean loadConfigFromFile, boolean readFieldsFromConfig)
 	{
 
-		if (loadConfigFromFile)
-		{
-			config.load();
-		}
+		if (loadConfigFromFile) config.load();
 
-		Property propEnableConfigGUI = config.get(Configuration.CATEGORY_GENERAL, "enableConfigGui", enableConfigGui, "");
+
+		Property propEnableConfigGUI = config.get(Configuration.CATEGORY_GENERAL, "enableConfigGui", DefaultValues.enableConfigGui, "");
 		propEnableConfigGUI.setLanguageKey(String.format("%s.config.enableConfigGui", ArmorStand.MODID));
 		propEnableConfigGUI.setRequiresMcRestart(false);
 
-		Property propEnableDeathDrops = config.get(Configuration.CATEGORY_GENERAL, "overrideEntityInteract", overrideEntityInteract, "");
+		Property propEnableDeathDrops = config.get(Configuration.CATEGORY_GENERAL, "overrideEntityInteract", DefaultValues.overrideEntityInteract, "");
 		propEnableDeathDrops.setLanguageKey(String.format("%s.config.overrideEntityInteract", ArmorStand.MODID));
+		propEnableDeathDrops.setRequiresMcRestart(false);
+
+		Property propEnableNameTags = config.get(Configuration.CATEGORY_GENERAL, "enableNameTags", DefaultValues.enableNameTags, "");
+		propEnableNameTags.setLanguageKey(String.format("%s.config.enableNameTags", ArmorStand.MODID));
 		propEnableDeathDrops.setRequiresMcRestart(false);
 
 
@@ -84,60 +87,61 @@ public class ModConfiguration
 		{
 			propEnableConfigGUI.setConfigEntryClass(ModGuiConfigEntries.BooleanEntry.class);
 			propEnableDeathDrops.setConfigEntryClass(ModGuiConfigEntries.BooleanEntry.class);
+			propEnableNameTags.setConfigEntryClass(ModGuiConfigEntries.BooleanEntry.class);
 
 			List<String> propOrderGeneral = new ArrayList<String>();
 			propOrderGeneral.add(propEnableConfigGUI.getName());
 			propOrderGeneral.add(propEnableDeathDrops.getName());
+			propOrderGeneral.add(propEnableNameTags.getName());
 			config.setCategoryPropertyOrder(Configuration.CATEGORY_GENERAL, propOrderGeneral);
 
 		}
-		catch(NoClassDefFoundError e) { }
+		catch (NoClassDefFoundError e)
+		{
+		}
 
 
 		if (readFieldsFromConfig)
 		{
 			enableConfigGui = propEnableConfigGUI.getBoolean();
 			overrideEntityInteract = propEnableDeathDrops.getBoolean();
+			enableNameTags = propEnableNameTags.getBoolean();
 		}
 
 		propEnableConfigGUI.set(enableConfigGui);
 		propEnableDeathDrops.set(overrideEntityInteract);
+		propEnableNameTags.set(enableNameTags);
 
-		if (config.hasChanged())
-		{
-			config.save();
-		}
 
+		if (config.hasChanged()) config.save();
 	}
 
 
-
-
-	public static class ConfigEventHandler
+	@EventBusSubscriber
+	public static class EventHandlers
 	{
+
 		@SubscribeEvent
-		public void onPlayerLoggedIn(PlayerLoggedInEvent event)
+		public static void onPlayerLoggedIn(PlayerLoggedInEvent event)
 		{
 			if (!event.player.world.isRemote)
 			{
-				ArmorStand.INSTANCE.getNetwork().sendTo(new ConfigSyncMessage(), (EntityPlayerMP)event.player);
+				ArmorStand.NETWORK.sendTo(new ConfigSyncMessage(), (EntityPlayerMP)event.player);
 			}
 		}
-	}
 
-	public static class ClientConfigEventHandler
-	{
 		@SubscribeEvent
-		public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+		@SideOnly(Side.CLIENT)
+		public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 		{
-			if (ArmorStand.MODID.equals(event.getModID()))
+			if (event.getModID().equals(ArmorStand.MODID))
 			{
 				if (!event.isWorldRunning() || Minecraft.getMinecraft().isSingleplayer())
 				{
 					syncFromGUI();
 					if (event.isWorldRunning() && Minecraft.getMinecraft().isSingleplayer())
 					{
-						ArmorStand.INSTANCE.getNetwork().sendToServer(new ConfigSyncMessage());
+						ArmorStand.NETWORK.sendToServer(new ConfigSyncMessage());
 					}
 				}
 			}

@@ -1,4 +1,4 @@
-package net.crazysnailboy.mods.armorstand.common.network;
+package net.crazysnailboy.mods.armorstand.common.network.message;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
 
 public class ArmorStandSyncMessage implements IMessage
 {
@@ -46,6 +47,7 @@ public class ArmorStandSyncMessage implements IMessage
 
 	public static final class MessageHandler implements IMessageHandler<ArmorStandSyncMessage, IMessage>
 	{
+
 		@Override
 		public IMessage onMessage(final ArmorStandSyncMessage message, final MessageContext ctx)
 		{
@@ -54,6 +56,7 @@ public class ArmorStandSyncMessage implements IMessage
 			IThreadListener threadListener = (WorldServer)world;
 			threadListener.addScheduledTask(new Runnable()
 			{
+
 				@Override
 				public void run()
 				{
