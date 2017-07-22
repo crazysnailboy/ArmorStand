@@ -16,6 +16,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 
+
 public class ArmorStandHooks
 {
 
@@ -47,7 +48,7 @@ public class ArmorStandHooks
 
 	private static EnumActionResult giveItemToArmorStand(EntityArmorStand armorstand, EntityPlayer player, ItemStack playerStack)
 	{
-		for ( EntityEquipmentSlot giveSlot : new EntityEquipmentSlot[] { getSlotFromItem(armorstand, playerStack.getItem()), EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND } )
+		for (EntityEquipmentSlot giveSlot : new EntityEquipmentSlot[] { getSlotFromItem(armorstand, playerStack.getItem()), EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND })
 		{
 			if (giveSlot == null) continue;
 
@@ -67,7 +68,7 @@ public class ArmorStandHooks
 
 	private static EnumActionResult takeItemFromArmorStand(EntityArmorStand armorstand, EntityPlayer player, Vec3d vec)
 	{
-		for ( EntityEquipmentSlot takeSlot : new EntityEquipmentSlot[] { EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.MAINHAND, getSlotFromVector(armorstand, vec) })
+		for (EntityEquipmentSlot takeSlot : new EntityEquipmentSlot[] { EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.MAINHAND, getSlotFromVector(armorstand, vec) })
 		{
 			if (takeSlot == null) continue;
 
@@ -132,8 +133,6 @@ public class ArmorStandHooks
 		}
 		return slot;
 	}
-
-
 
 
 //	private static EnumActionResult applyPlayerInteraction_defaultImplementation(EntityArmorStand armorstand, EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)

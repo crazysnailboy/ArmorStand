@@ -25,3 +25,6 @@ csb_armorstand.config.enableConfigGui.tooltip=Show the Armor Stand configuration
 
 csb_armorstand.config.overrideEntityInteract=Process Interactions
 csb_armorstand.config.overrideEntityInteract.tooltip=Use custom logic when right-clicking an Armor Stand
+
+csb_armorstand.key.openArmorStandGui=Open GUI
+csb_armorstand.key.categories.general=Armor Stand Configurator

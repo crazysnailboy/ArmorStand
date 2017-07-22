@@ -1,29 +1,33 @@
 {
 	"homepage": "https://minecraft.curseforge.com/projects/armor-stand-configurator/files",
 	"promos": {
-		"1.12-latest": "1.0.2",
-		"1.12-recommended": "1.0.2",
-		"1.11.2-latest": "1.0.2",
-		"1.11.2-recommended": "1.0.2",
-		"1.11-latest": "1.0.2",
-		"1.11-recommended": "1.0.2",
-		"1.10.2-latest": "1.0.1",
-		"1.10.2-recommended": "1.0.1"
+		"1.12-latest": "1.0.3",
+		"1.12-recommended": "1.0.3",
+		"1.11.2-latest": "1.0.3",
+		"1.11.2-recommended": "1.0.3",
+		"1.11-latest": "1.0.3",
+		"1.11-recommended": "1.0.3",
+		"1.10.2-latest": "1.0.3",
+		"1.10.2-recommended": "1.0.3"
 	},
 	"1.12": {
+		"1.0.3": "Added keybinding and nametag support",
 		"1.0.2": "Initial 1.12 release"
 	},
 	"1.11.2": {
+		"1.0.3": "Added keybinding and nametag support",
 		"1.0.2": "Fixed crash in v1.0.1",
 		"1.0.1": "Added support for the NoGravity tag",
 		"1.0": "Initial release"
 	},
 	"1.11": {
+		"1.0.3": "Added keybinding and nametag support",
 		"1.0.2": "Fixed crash in v1.0.1",
 		"1.0.1": "Added support for the NoGravity tag",
 		"1.0": "Initial release"
 	},
 	"1.10.2": {
+		"1.0.3": "Added keybinding and nametag support",
 		"1.0.1": "Added support for the NoGravity tag",
 		"1.0": "Initial release"
 	}	

@@ -4,7 +4,7 @@ import java.io.IOException;
 import net.crazysnailboy.mods.armorstand.ArmorStand;
 import net.crazysnailboy.mods.armorstand.client.gui.GuiComponents.GuiNumberField;
 import net.crazysnailboy.mods.armorstand.client.gui.GuiComponents.GuiToggleButton;
-import net.crazysnailboy.mods.armorstand.common.network.ArmorStandSyncMessage;
+import net.crazysnailboy.mods.armorstand.common.network.message.ArmorStandSyncMessage;
 import net.crazysnailboy.mods.armorstand.util.ArmorStandData;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+
 @SideOnly(Side.CLIENT)
 public class GuiArmorStand extends GuiScreen
 {
@@ -29,16 +30,14 @@ public class GuiArmorStand extends GuiScreen
 	private final String[] buttonLabels = new String[] { "invisible", "no_base_plate", "no_gravity", "show_arms", "small", "rotation" };
 	private final String[] sliderLabels = new String[] { "head", "body", "left_leg", "right_leg", "left_arm", "right_arm" };
 
-
-	private GuiTextField rotationTextField;
+	private GuiNumberField rotationTextField;
 	private GuiToggleButton[] toggleButtons = new GuiToggleButton[5];
-	private GuiTextField[] poseTextFields = new GuiTextField[18];
+	private GuiNumberField[] poseTextFields = new GuiNumberField[18];
 
 	private GuiButton copyButton;
 	private GuiButton pasteButton;
 	private GuiButton doneButton;
 	private GuiButton cancelButton;
-
 
 	public GuiArmorStand(EntityArmorStand entityArmorStand)
 	{
@@ -47,8 +46,10 @@ public class GuiArmorStand extends GuiScreen
 		this.armorStandData = new ArmorStandData();
 		this.armorStandData.readFromNBT(entityArmorStand.writeToNBT(new NBTTagCompound()));
 
-		for ( int i = 0 ; i < buttonLabels.length ; i++ ) buttonLabels[i] = I18n.format(String.format("%s.gui.label." + buttonLabels[i], ArmorStand.MODID));
-		for ( int i = 0 ; i < sliderLabels.length ; i++ ) sliderLabels[i] = I18n.format(String.format("%s.gui.label." + sliderLabels[i], ArmorStand.MODID));
+		for (int i = 0; i < this.buttonLabels.length; i++)
+			this.buttonLabels[i] = I18n.format(String.format("%s.gui.label." + this.buttonLabels[i], ArmorStand.MODID));
+		for (int i = 0; i < this.sliderLabels.length; i++)
+			this.sliderLabels[i] = I18n.format(String.format("%s.gui.label." + this.sliderLabels[i], ArmorStand.MODID));
 	}
 
 	@Override
@@ -56,7 +57,6 @@ public class GuiArmorStand extends GuiScreen
 	{
 		return false;
 	}
-
 
 	@Override
 	public void initGui()
@@ -67,7 +67,7 @@ public class GuiArmorStand extends GuiScreen
 		int offsetY = 50;
 
 		// toggle buttons
-		for ( int i = 0 ; i < this.toggleButtons.length ; i++ )
+		for (int i = 0; i < this.toggleButtons.length; i++)
 		{
 			int id = i;
 			int x = offsetX;
@@ -83,7 +83,7 @@ public class GuiArmorStand extends GuiScreen
 
 		// pose textboxes
 		offsetX = this.width - 20 - 100;
-		for ( int i = 0 ; i < this.poseTextFields.length ; i++ )
+		for (int i = 0; i < this.poseTextFields.length; i++)
 		{
 			int id = 5 + i;
 			int x = 1 + offsetX + ((i % 3) * 35);
@@ -109,7 +109,6 @@ public class GuiArmorStand extends GuiScreen
 		this.cancelButton = this.addButton(new GuiButton(99, offsetX - 96, offsetY, 96, 20, I18n.format("gui.cancel")));
 	}
 
-
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
@@ -119,18 +118,19 @@ public class GuiArmorStand extends GuiScreen
 		this.drawCenteredString(this.fontRenderer, I18n.format(String.format("%s.gui.title", ArmorStand.MODID)), this.width / 2, 20, 0xFFFFFF);
 
 		// textboxes
-		rotationTextField.drawTextBox();
-		for ( GuiTextField textField : poseTextFields ) textField.drawTextBox();
+		this.rotationTextField.drawTextBox();
+		for (GuiTextField textField : this.poseTextFields)
+			textField.drawTextBox();
 
 		int offsetY = 50;
 
 		// left column labels
 		int offsetX = 20;
-		for ( int i = 0 ; i < buttonLabels.length ; i++ )
+		for (int i = 0; i < this.buttonLabels.length; i++)
 		{
 			int x = offsetX;
 			int y = offsetY + (i * 22) + (10 - (this.fontRenderer.FONT_HEIGHT / 2));
-			this.drawString(this.fontRenderer, buttonLabels[i], x, y, 0xA0A0A0);
+			this.drawString(this.fontRenderer, this.buttonLabels[i], x, y, 0xA0A0A0);
 		}
 
 		// right column labels
@@ -140,50 +140,49 @@ public class GuiArmorStand extends GuiScreen
 		this.drawString(this.fontRenderer, "Y", offsetX + (1 * 35), 37, 0xA0A0A0);
 		this.drawString(this.fontRenderer, "Z", offsetX + (2 * 35), 37, 0xA0A0A0);
 		// pose textboxes
-		for ( int i = 0 ; i < sliderLabels.length ; i++ )
+		for (int i = 0; i < this.sliderLabels.length; i++)
 		{
-			int x = offsetX - this.fontRenderer.getStringWidth(sliderLabels[i]) - 10;
+			int x = offsetX - this.fontRenderer.getStringWidth(this.sliderLabels[i]) - 10;
 			int y = offsetY + (i * 22) + (10 - (this.fontRenderer.FONT_HEIGHT / 2));
-			this.drawString(this.fontRenderer, sliderLabels[i], x, y, 0xA0A0A0);
+			this.drawString(this.fontRenderer, this.sliderLabels[i], x, y, 0xA0A0A0);
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
-
 	@Override
 	public void updateScreen()
 	{
 		super.updateScreen();
-		rotationTextField.updateCursorCounter();
-		for ( GuiTextField textField : poseTextFields ) textField.updateCursorCounter();
+		this.rotationTextField.updateCursorCounter();
+		for (GuiTextField textField : this.poseTextFields)
+			textField.updateCursorCounter();
 	}
-
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
 		super.keyTyped(typedChar, keyCode);
 
-		if (rotationTextField.textboxKeyTyped(typedChar, keyCode))
+		if (this.rotationTextField.textboxKeyTyped(typedChar, keyCode))
 		{
-			this.textFieldUpdated(rotationTextField);
+			this.textFieldUpdated(this.rotationTextField);
 			return;
 		}
 
 		if (keyCode == 15) // tab
 		{
-			for ( int i = 0 ; i < poseTextFields.length ; i++ )
+			for (int i = 0; i < this.poseTextFields.length; i++)
 			{
-				if (poseTextFields[i].isFocused())
+				if (this.poseTextFields[i].isFocused())
 				{
-					poseTextFields[i].setCursorPositionEnd();
-					poseTextFields[i].setFocused(false);
+					this.poseTextFields[i].setCursorPositionEnd();
+					this.poseTextFields[i].setFocused(false);
 
-					int j = (!GuiScreen.isShiftKeyDown() ? (i == poseTextFields.length - 1 ? 0 : i + 1) : (i == 0 ? poseTextFields.length - 1 : i - 1));
-					poseTextFields[j].setFocused(true);
-					poseTextFields[j].setCursorPosition(0);
-					poseTextFields[j].setSelectionPos(poseTextFields[j].getText().length());
+					int j = (!GuiScreen.isShiftKeyDown() ? (i == this.poseTextFields.length - 1 ? 0 : i + 1) : (i == 0 ? this.poseTextFields.length - 1 : i - 1));
+					this.poseTextFields[j].setFocused(true);
+					this.poseTextFields[j].setCursorPosition(0);
+					this.poseTextFields[j].setSelectionPos(this.poseTextFields[j].getText().length());
 
 					return;
 				}
@@ -191,7 +190,7 @@ public class GuiArmorStand extends GuiScreen
 		}
 		else
 		{
-			for ( GuiTextField textField : poseTextFields )
+			for (GuiTextField textField : this.poseTextFields)
 			{
 				if (textField.textboxKeyTyped(typedChar, keyCode))
 				{
@@ -207,56 +206,57 @@ public class GuiArmorStand extends GuiScreen
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
 	{
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		rotationTextField.mouseClicked(mouseX, mouseY, mouseButton);
-		for ( GuiTextField textField : poseTextFields ) textField.mouseClicked(mouseX, mouseY, mouseButton);
+		this.rotationTextField.mouseClicked(mouseX, mouseY, mouseButton);
+		for (GuiTextField textField : this.poseTextFields)
+			textField.mouseClicked(mouseX, mouseY, mouseButton);
 	}
-
 
 	@Override
 	protected void actionPerformed(net.minecraft.client.gui.GuiButton button)
 	{
 		if (button instanceof GuiToggleButton) ((GuiToggleButton)button).buttonPressed();
 
-		if (button == copyButton)
+		if (button == this.copyButton)
 		{
-			NBTTagCompound compound = writeFieldsToNBT();
+			NBTTagCompound compound = this.writeFieldsToNBT();
 			String clipboardData = compound.toString();
 			GuiScreen.setClipboardString(clipboardData);
 			return;
 		}
-		else if (button == pasteButton)
+		else if (button == this.pasteButton)
 		{
 			try
 			{
 				String clipboardData = GuiScreen.getClipboardString();
 				NBTTagCompound compound = JsonToNBT.getTagFromJson(clipboardData);
 				this.readFieldsFromNBT(compound);
-				updateEntity(compound);
+				this.updateEntity(compound);
 			}
-			catch (NBTException e) { }
+			catch (NBTException e)
+			{
+			}
 			return;
 		}
-		else if (button == doneButton)
+		else if (button == this.doneButton)
 		{
-			updateEntity(writeFieldsToNBT());
+			this.updateEntity(this.writeFieldsToNBT());
 			this.mc.displayGuiScreen((GuiScreen)null);
 			return;
 		}
-		else if (button == cancelButton)
+		else if (button == this.cancelButton)
 		{
-			updateEntity(this.armorStandData.writeToNBT());
+			this.updateEntity(this.armorStandData.writeToNBT());
 			this.mc.displayGuiScreen((GuiScreen)null);
 			return;
 		}
 
-		updateEntity(writeFieldsToNBT());
+		this.updateEntity(this.writeFieldsToNBT());
 	}
 
 	protected void textFieldUpdated(net.minecraft.client.gui.GuiTextField textField)
 	{
-		updateEntity(writeFieldsToNBT());
+		this.updateEntity(this.writeFieldsToNBT());
 	}
-
 
 	private NBTTagCompound writeFieldsToNBT()
 	{
@@ -268,79 +268,76 @@ public class GuiArmorStand extends GuiScreen
 		compound.setBoolean("Small", this.toggleButtons[4].getValue());
 
 		NBTTagList rotationTag = new NBTTagList();
-		rotationTag.appendTag(new NBTTagFloat(Float.valueOf( this.rotationTextField.getText() )));
+		rotationTag.appendTag(new NBTTagFloat(Float.valueOf(this.rotationTextField.getFloat())));
 		compound.setTag("Rotation", rotationTag);
 
 		NBTTagCompound poseTag = new NBTTagCompound();
 
 		NBTTagList poseHeadTag = new NBTTagList();
-		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[0].getText() )));
-		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[1].getText() )));
-		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[2].getText() )));
+		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[0].getFloat())));
+		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[1].getFloat())));
+		poseHeadTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[2].getFloat())));
 		poseTag.setTag("Head", poseHeadTag);
 
 		NBTTagList poseBodyTag = new NBTTagList();
-		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[3].getText() )));
-		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[4].getText() )));
-		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[5].getText() )));
+		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[3].getFloat())));
+		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[4].getFloat())));
+		poseBodyTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[5].getFloat())));
 		poseTag.setTag("Body", poseBodyTag);
 
 		NBTTagList poseLeftLegTag = new NBTTagList();
-		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[6].getText() )));
-		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[7].getText() )));
-		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[8].getText() )));
+		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[6].getFloat())));
+		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[7].getFloat())));
+		poseLeftLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[8].getFloat())));
 		poseTag.setTag("LeftLeg", poseLeftLegTag);
 
 		NBTTagList poseRightLegTag = new NBTTagList();
-		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[9].getText() )));
-		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[10].getText() )));
-		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[11].getText() )));
+		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[9].getFloat())));
+		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[10].getFloat())));
+		poseRightLegTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[11].getFloat())));
 		poseTag.setTag("RightLeg", poseRightLegTag);
 
 		NBTTagList poseLeftArmTag = new NBTTagList();
-		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[12].getText() )));
-		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[13].getText() )));
-		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[14].getText() )));
+		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[12].getFloat())));
+		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[13].getFloat())));
+		poseLeftArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[14].getFloat())));
 		poseTag.setTag("LeftArm", poseLeftArmTag);
 
 		NBTTagList poseRightArmTag = new NBTTagList();
-		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[15].getText() )));
-		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[16].getText() )));
-		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf( this.poseTextFields[17].getText() )));
+		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[15].getFloat())));
+		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[16].getFloat())));
+		poseRightArmTag.appendTag(new NBTTagFloat(Float.valueOf(this.poseTextFields[17].getFloat())));
 		poseTag.setTag("RightArm", poseRightArmTag);
 
 		compound.setTag("Pose", poseTag);
 		return compound;
 	}
 
-
 	private void readFieldsFromNBT(NBTTagCompound compound)
 	{
 		ArmorStandData armorStandData = new ArmorStandData();
 		armorStandData.readFromNBT(compound);
 
-		for ( int i = 0 ; i < toggleButtons.length ; i++ )
+		for (int i = 0; i < this.toggleButtons.length; i++)
 		{
-			toggleButtons[i].setValue(armorStandData.getBooleanValue(i));
+			this.toggleButtons[i].setValue(armorStandData.getBooleanValue(i));
 		}
 
-		rotationTextField.setText(String.valueOf((int)armorStandData.rotation));
+		this.rotationTextField.setText(String.valueOf((int)armorStandData.rotation));
 
-		for ( int i = 0 ; i < poseTextFields.length ; i++ )
+		for (int i = 0; i < this.poseTextFields.length; i++)
 		{
-			poseTextFields[i].setText(String.valueOf((int)armorStandData.pose[i]));
+			this.poseTextFields[i].setText(String.valueOf((int)armorStandData.pose[i]));
 		}
 	}
-
 
 	private void updateEntity(NBTTagCompound compound)
 	{
-		NBTTagCompound nbttagcompound = entityArmorStand.writeToNBT(new NBTTagCompound()).copy();
+		NBTTagCompound nbttagcompound = this.entityArmorStand.writeToNBT(new NBTTagCompound()).copy();
 		nbttagcompound.merge(compound);
-		entityArmorStand.readFromNBT(nbttagcompound);
+		this.entityArmorStand.readFromNBT(nbttagcompound);
 
-		ArmorStand.INSTANCE.getNetwork().sendToServer(new ArmorStandSyncMessage(this.entityArmorStand.getEntityId(), compound));
+		ArmorStand.NETWORK.sendToServer(new ArmorStandSyncMessage(this.entityArmorStand.getEntityId(), compound));
 	}
-
 
 }
