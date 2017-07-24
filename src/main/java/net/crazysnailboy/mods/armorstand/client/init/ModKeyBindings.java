@@ -36,7 +36,7 @@ public class ModKeyBindings
 	}
 
 
-	@EventBusSubscriber
+	@EventBusSubscriber(value = Side.CLIENT)
 	public static class EventHandlers
 	{
 
